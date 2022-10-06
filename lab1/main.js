@@ -1,5 +1,5 @@
-var submitButton = document.querySelector('#submit')
-submitButton.addEventListener("click", () => {
+var submitButton = document.querySelector('#inputs')
+submitButton.addEventListener("change", () => {
     var data = document.querySelectorAll("input");
     var castedData = []
 
