@@ -11,39 +11,21 @@
 
 <body>
     <div id="slideshow">
+        <div id="pause" style="display: none;">&#10074 &#10074</div>
         <div class="slideshow-container">
             <div id="slideshow-content">
-                <div class="mySlides fade">
-                    <div class="numbertext">1 / 3</div>
-                    <img src="https://di.com.pl/pic/photo/Screen_Shot_2014_08_21_at_101244_AM_640x834_1408689031.png"
-                        >
-                    <div class="text">Caption Text</div>
-                </div>
 
-                <div class="mySlides fade">
-                    <div class="numbertext">2 / 3</div>
-                    <img src="https://s9.tvp.pl/images2/9/b/7/uid_9b7826f856b7d8a214e96177c74b2e2b1604928163838_width_1280_play_0_pos_0_gs_0_height_720_warunki-pracy-na-planie-dostosowano-do-wymagan-bezpieczenstwa-zw-z-epidemia-fot-shutterstockelisa-manzati-zdjecie-ilustracyjne.jpg"
-                        >
-                    <div class="text">Caption Two</div>
-                </div>
-
-                <div class="mySlides fade">
-                    <div class="numbertext">3 / 3</div>
-                    <img src="https://ocdn.eu/pulscms-transforms/1/NV9k9kpTURBXy9hZjA2NDY0YWVkN2JiMjJiMTUyMmZjNDg3MGI0ZDU2My5qcGeTkwXNBLDNAqSVB9kyL3B1bHNjbXMvTURBXy8yMzM3YzlmZDZiOTMxZWU2Y2IwZDIzZGNiYTI1OGE5ZC5wbmcAwgCTCaZkNjFjMTgGgaEwAQ/zwycieskie-zdjecie-wildlife-photographer-of-the-year-2019-autor-yongqing-bao.jpg"
-                        >
-                    <div class="text">Caption Three</div>
-                </div>
             </div>
             <a class="prev">&#10094;</a>
             <a class="next">&#10095;</a>
         </div>
         <br>
-        <div style="text-align:center">
-            <span class="dot" onclick="currentSlide(1)"></span>
-            <span class="dot" onclick="currentSlide(2)"></span>
-            <span class="dot" onclick="currentSlide(3)"></span>
+        <div id="dots" style="text-align:center">
+
         </div>
     </div>
+    <input type="checkbox" id="animation-checkbox" checked style="color: rgb(255, 255, 255);">
+    <label for="animation-checkbox">animacja</label>
     <script src="main.js"></script>
 </body>
 
