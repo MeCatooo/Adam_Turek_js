@@ -7,14 +7,14 @@
 }
 
 .mySlides {
-    height: 800px;
+    height: 600px;
     width: 100%;
     text-align: center;
     display: none;
 }
 
 .mySlides img {
-    height: 800px;
+    height: 600px;
 }
 
 .prev, .next {
