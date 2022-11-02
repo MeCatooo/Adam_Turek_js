@@ -7,7 +7,7 @@ class DataStroage {
     }
     pushData(sound) {
         this.storage.filter(item => item.isRecording === true)
-            .forEach(item=>item.pushData(sound));
+            .forEach(item => item.pushData(sound));
     }
     clearData(id) {
         this.storage.find(item => item.id === id)?.clearData();
@@ -42,13 +42,14 @@ class DataUnit {
     deactiveChannel() {
         this.isRecording = false;
     }
-    getData(){
+    getData() {
         return this.data;
     }
 }
 
 let data = new DataStroage();
-let intervals = [];
+let intervalsMetronom = [];
+let intervalsRecords = [];
 
 document.addEventListener("keypress", onKeyPress)
 
@@ -97,45 +98,87 @@ function playSound(sound) {
     audioTag.play();
 }
 
-function removeInterval(id) {
-    const index = intervals.findIndex(item => item.id === id)
-    if (index > -1) {
-        intervals.splice(index, 1);
+function playRecord(event) {
+    const storage = data.getData(event.target.parentElement.id);
+    for (let i = 0; i < storage.length; i++) {
+        setTimeout(() => {
+            playSound(storage[i].soundName)
+        }, storage[i].timestamp - storage[0].timestamp)
     }
+}
+
+function removeInterval(id) {
+    const index = intervalsMetronom.findIndex(item => item.id === id)
+    if (index > -1) {
+        intervalsMetronom.splice(index, 1);
+    }
+}
+function removeIntervalRecorded(id) {
+    const index = intervalsRecords.findIndex(item => item.id === id)
+    if (index > -1) {
+        intervalsRecords.splice(index, 1);
+    }
+}
+
+function disableButtons(element) {
+    element.querySelectorAll("button").forEach(item => item.disabled = true);
+}
+
+function enableButtons(element) {
+    element.querySelectorAll("button").forEach(item => item.disabled = false);
 }
 
 document.querySelectorAll("#start").forEach(item => {
     item.addEventListener("click", (event) => {
-        if (event.target.checked) {
-            data.activeChannel(event.target.parentElement.id)
-        }
-        else {
-            data.deactiveChannel(event.target.parentElement.id)
-        }
+        data.activeChannel(event.target.parentElement.id)
+        disableButtons(event.target.parentElement);
+        const progress = event.target.parentElement.querySelector("progress");
+        progress.value = 0;
+        const interval = setInterval(() => {
+            progress.value += 0.5;
+        }, 500)
+        setTimeout(() => {
+            data.deactiveChannel(event.target.parentElement.id);
+            clearInterval(interval);
+            enableButtons(event.target.parentElement);
+        }, 1000 * 10)
     })
 })
 
 document.querySelectorAll("#clear").forEach(item => {
     item.addEventListener("click", (event) => {
+        event.target.parentElement.querySelector("progress").value = 0;
         data.clearData(event.target.parentElement.id);
     })
 })
 
 document.querySelectorAll("#play").forEach(item => {
     item.addEventListener("click", (event) => {
-        const storage = data.getData(event.target.parentElement.id);
-        for (let i = 0; i < storage.length; i++) {
-            setTimeout(() => {
-                playSound(storage[i].soundName)
-            }, storage[i].timestamp - storage[0].timestamp)
-        }
+        playRecord(event);
     })
 })
 
+document.querySelectorAll("#loop").forEach(item => {
+    item.addEventListener("click", (event) => {
+        const id = event.target.parentElement.id;
+        const isRunning = intervalsRecords.find(item => item.id === id);
+        if (isRunning) {
+            clearInterval(isRunning.interval)
+            removeIntervalRecorded(id);
+        }
+        if (!event.target.checked)
+            return;
+        const interval = setInterval(() => {
+            playRecord(event);
+        }, 1000 * 10);
+        const toSave = { interval: interval, id: id }
+        intervalsRecords.push(toSave);
+    })
+})
 document.querySelectorAll(".audio-style input").forEach(element => {
     element.addEventListener("change", (event) => {
         const id = event.target.parentElement.id;
-        const isRunning = intervals.find(item => item.id === id);
+        const isRunning = intervalsMetronom.find(item => item.id === id);
         if (isRunning) {
             clearInterval(isRunning.interval)
             removeInterval(id);
@@ -146,12 +189,12 @@ document.querySelectorAll(".audio-style input").forEach(element => {
             recordingLayer(id)
         }, 1 / (event.target.value / 60) * 200)
         const toSave = { interval: interval, id: id }
-        intervals.push(toSave)
+        intervalsMetronom.push(toSave)
     })
 });
 
-window.addEventListener("load", (event)=>{
-   const tmp = document.querySelectorAll("#start");
-   tmp.forEach(item=>data.registerId(item.parentElement.id));
-})
+window.addEventListener("load", (event) => {
+    const tmp = document.querySelectorAll("#start");
+    tmp.forEach(item => data.registerId(item.parentElement.id));
+});
 
