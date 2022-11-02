@@ -1,8 +1,53 @@
-recording = {
-    isOn: false,
-    channel: []
-};
-let data = [];
+class DataStroage {
+    constructor() {
+        this.storage = []
+    }
+    registerId(id) {
+        this.storage.push(new DataUnit(id))
+    }
+    pushData(sound) {
+        this.storage.filter(item => item.isRecording === true)
+            .forEach(item=>item.pushData(sound));
+    }
+    clearData(id) {
+        this.storage.find(item => item.id === id)?.clearData();
+    }
+    activeChannel(id) {
+        this.clearData(id);
+        this.storage.find(item => item.id === id)?.activeChannel();
+    }
+    deactiveChannel(id) {
+        this.storage.find(item => item.id === id)?.deactiveChannel();
+    }
+    getData(id) {
+        return this.storage.find(item => item.id === id)?.getData();
+    }
+}
+
+class DataUnit {
+    constructor(id) {
+        this.id = id;
+        this.isRecording = false;
+        this.data = [];
+    }
+    pushData(sound) {
+        this.data.push({ soundName: sound, timestamp: Date.now() })
+    }
+    clearData() {
+        this.data = [];
+    }
+    activeChannel() {
+        this.isRecording = true;
+    }
+    deactiveChannel() {
+        this.isRecording = false;
+    }
+    getData(){
+        return this.data;
+    }
+}
+
+let data = new DataStroage();
 let intervals = [];
 
 document.addEventListener("keypress", onKeyPress)
@@ -42,25 +87,14 @@ function onKeyPress(event) {
 }
 
 function recordingLayer(sound) {
-    if (recording.isOn) {
-        var recorded = { soundName: sound, timestamp: Date.now() }
-        data.push(recorded)
-    }
+    data.pushData(sound)
     playSound(sound)
-
 }
 
 function playSound(sound) {
     const audioTag = document.querySelector(`#${sound}`).querySelector("audio");
     audioTag.currentTime = 0;
     audioTag.play();
-}
-
-function removeChannel(number) {
-    const index = recording.channel.indexOf(number);
-    if (index > -1) {
-        recording.channel.splice(index, 1);
-    }
 }
 
 function removeInterval(id) {
@@ -70,24 +104,30 @@ function removeInterval(id) {
     }
 }
 
-document.querySelectorAll("#start").addEventListener("click", (event) => {
-    if (event.target.checked) {
-        data = [];
-        recording.isOn = true;
-        recording.channel.push(event.target.parentElement.id);
-    }
-    else {
-        recording.isOn = false;
-        removeChannel(event.target.parentElement.id)
-    }
+document.querySelectorAll("#start").forEach(item => {
+    item.addEventListener("click", (event) => {
+        if (event.target.checked) {
+            data.activeChannel(event.target.parentElement.id)
+        }
+        else {
+            data.deactiveChannel(event.target.parentElement.id)
+        }
+    })
 })
 
-document.querySelectorAll("#play").forEach(item =>{
-    item.addEventListener("click", () => {
-        for (let i = 0; i < data.length; i++) {
+document.querySelectorAll("#clear").forEach(item => {
+    item.addEventListener("click", (event) => {
+        data.clearData(event.target.parentElement.id);
+    })
+})
+
+document.querySelectorAll("#play").forEach(item => {
+    item.addEventListener("click", (event) => {
+        const storage = data.getData(event.target.parentElement.id);
+        for (let i = 0; i < storage.length; i++) {
             setTimeout(() => {
-                playSound(data[i].soundName)
-            }, data[i].timestamp - data[0].timestamp)
+                playSound(storage[i].soundName)
+            }, storage[i].timestamp - storage[0].timestamp)
         }
     })
 })
@@ -100,13 +140,18 @@ document.querySelectorAll(".audio-style input").forEach(element => {
             clearInterval(isRunning.interval)
             removeInterval(id);
         }
-        if(event.target.value <= 0)
+        if (event.target.value <= 0)
             return;
         const interval = setInterval(() => {
             recordingLayer(id)
-        }, 1/(event.target.value / 60) * 200)
+        }, 1 / (event.target.value / 60) * 200)
         const toSave = { interval: interval, id: id }
         intervals.push(toSave)
     })
 });
+
+window.addEventListener("load", (event)=>{
+   const tmp = document.querySelectorAll("#start");
+   tmp.forEach(item=>data.registerId(item.parentElement.id));
+})
 
