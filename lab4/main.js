@@ -1,5 +1,22 @@
 import { Note, Storage } from './library.js';
 
+
+Note.prototype.pin = function () {
+  this.note.classList.toggle("pinned");
+  if (this.note.classList.contains("pinned")) {
+    storage.pin(this);
+    renderPinned(this);
+  } else {
+    storage.unpin(this);
+    renderNote(this);
+  }
+}
+
+Note.prototype.remove = function () {
+  storage.remove(this);
+  this.note.remove();
+}
+
 let storage = new Storage();
 
 addEventListener("load", () => {
@@ -11,23 +28,11 @@ addEventListener("load", () => {
     });
 });
 
-
 document.querySelector("#add").addEventListener("click", function () {
   const newNote = new Note();
   storage.add(newNote);
   document.querySelector("#Notes").appendChild(newNote.note);
 });
-
-Note.prototype.pin = function () {
-  this.note.classList.toggle("pinned");
-  if (this.note.classList.contains("pinned")) {
-    storage.pin(this);
-    renderPinned(note);
-  } else {
-    storage.unpin(this);
-    renderNote(note);
-  }
-}
 
 document.querySelector("#notifications").addEventListener("click", function (event) {
   const content = document.querySelector(".content")

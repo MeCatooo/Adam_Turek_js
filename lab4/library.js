@@ -1,15 +1,23 @@
 export class Note {
-    constructor(date, color, text) {
+    constructor(date, color, text, title) {
         this.note = document.createElement("div");
         this.note.classList.add("Note");
         this.createUtility(date, color);
-        this.createInput(text);
+        this.createInput(text, title);
         this.createButtons();
 
     }
 
     //create input
-    createInput(text) {
+    createInput(text, title) {
+        this.title = document.createElement("input");
+        this.title.type = "text";
+        this.title.classList.add("title");
+        this.title.placeholder = "Title";
+        this.title.disabled = true;
+        this.title.value = title ?? "";
+        this.note.appendChild(this.title);
+
         this.input = document.createElement("textarea");
         this.input.placeholder = "Enter a note";
         this.input.classList.add("noteInput");
@@ -23,18 +31,22 @@ export class Note {
     createUtility(date, color) {
         const utility = document.createElement("div");
         utility.classList.add("utility");
+
         const pin = document.createElement("img");
         pin.src = "../utility/pin-icon.webp";
         pin.addEventListener("click", this.pin.bind(this));
         utility.appendChild(pin);
+
         this.createDate = date ?? Date.now();
         utility.appendChild(document.createElement("span")).textContent = new Date().toISOString().split('T')[0];
+
         this.color = document.createElement("input");
         this.color.type = "color";
+        this.color.value = color ?? "#f2f2f2";
         this.color.addEventListener("change", this.setColor.bind(this));
         if(color){
-            this.color.value = color;
-            setColor(color);
+            this.color.value = color ?? "#ffffff";
+            this.setColor(color ?? "#ffffff");
         }
         utility.appendChild(this.color);
 
@@ -45,14 +57,17 @@ export class Note {
     createButtons() {
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
-        const editButton = document.createElement("button");
-        editButton.innerHTML = "Edit";
-        editButton.addEventListener("click", this.edit.bind(this));
-        buttons.appendChild(editButton);
+
+        this.editButton = document.createElement("button");
+        this.editButton.innerHTML = "Edit";
+        this.editButton.addEventListener("click", this.edit.bind(this));
+        buttons.appendChild(this.editButton);
+
         const deleteButton = document.createElement("button");
         deleteButton.innerHTML = "Delete";
         deleteButton.addEventListener("click", this.remove.bind(this));
         buttons.appendChild(deleteButton);
+        
         const remindButton = document.createElement("button");
         remindButton.innerHTML = "Remind";
         remindButton.addEventListener("click", this.remind.bind(this));
@@ -62,6 +77,14 @@ export class Note {
     }
     edit() {
         this.input.toggleAttribute("disabled");
+        this.title.toggleAttribute("disabled");
+        if (!this.editButton.classList.contains("edit")) {
+            this.editButton.classList.add("edit");
+            this.editButton.innerHTML = "Save";
+        } else {
+            this.editButton.innerHTML = "Edit";
+            this.editButton.classList.remove("edit");
+        }
     }
     //remove note from document
     remove() {
@@ -81,6 +104,7 @@ export class Note {
     }
     jSON() {
         return {
+            title: this.title.value,
             text: this.input.value,
             date: this.createDate,
             color: this.color.value
@@ -117,14 +141,30 @@ export class Storage {
         this.add(note);
     }
     saveToStorage() {
-        localStorage.setItem("notes", JSON.stringify(this.notes));
-        localStorage.setItem("pinnedNotes", JSON.stringify(this.pinnedNotes));
+        localStorage.setItem("notes", JSON.stringify(this.notes.map(note => note.jSON())));
+        localStorage.setItem("pinnedNotes", JSON.stringify(this.pinnedNotes.map(note => note.jSON())));
     }
     loadFromStorage() {
-        this.notes = JSON.parse(localStorage.getItem("notes")) ?? [];
-        this.pinnedNotes = JSON.parse(localStorage.getItem("pinnedNotes")) ?? [];
+        const notess = JSON.parse(localStorage.getItem("notes")) ?? [];
+        const pinnedNotess = JSON.parse(localStorage.getItem("pinnedNotes")) ?? [];
+        notess.forEach(note => {
+            this.notes.push(new Note(
+                note.date,
+                note.color,
+                note.text,
+                note.title
+            ));
+        });
+        pinnedNotess.forEach(note => {
+            this.pinnedNotes.push(new Note(
+                note.date,
+                note.color,
+                note.text,
+                note.title
+            ));
+        });
+        addEventListener("change", this.saveToStorage.bind(this));
     }
-
 }
 
 export class Notification {
