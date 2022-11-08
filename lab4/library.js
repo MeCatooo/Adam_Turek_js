@@ -110,6 +110,11 @@ export class Note {
             color: this.color.value
         }
     }
+    isMatch(query) {
+        if(!query)
+            return true;
+        return (this.title.value.includes(query) || this.input.value.includes(query));
+    }
 
 }
 
@@ -164,6 +169,10 @@ export class Storage {
             ));
         });
         addEventListener("change", this.saveToStorage.bind(this));
+    }
+    findAll(query) {
+        return {notes:this.notes.filter(note => note.isMatch(query)), 
+            pinnedNotes:this.pinnedNotes.filter(note => note.isMatch(query))};
     }
 }
 
