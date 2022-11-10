@@ -27,7 +27,7 @@ export class Note {
         this.note.appendChild(this.input);
     }
 
-    //create utilitry
+    //create utility
     createUtility(date, color) {
         const utility = document.createElement("div");
         utility.classList.add("utility");
@@ -44,7 +44,7 @@ export class Note {
         this.color.type = "color";
         this.color.value = color ?? "#f2f2f2";
         this.color.addEventListener("change", this.setColor.bind(this));
-        if(color){
+        if (color) {
             this.color.value = color ?? "#ffffff";
             this.setColor(color ?? "#ffffff");
         }
@@ -67,7 +67,7 @@ export class Note {
         deleteButton.innerHTML = "Delete";
         deleteButton.addEventListener("click", this.remove.bind(this));
         buttons.appendChild(deleteButton);
-        
+
         const remindButton = document.createElement("button");
         remindButton.innerHTML = "Remind";
         remindButton.addEventListener("click", this.remind.bind(this));
@@ -75,6 +75,7 @@ export class Note {
 
         this.note.appendChild(buttons);
     }
+
     edit() {
         this.input.toggleAttribute("disabled");
         this.title.toggleAttribute("disabled");
@@ -87,21 +88,26 @@ export class Note {
         }
     }
     //remove note from document
+    
     remove() {
         this.note.remove();
     }
     //remider
+    
     remind() {
         new Notification(1000, this);
     }
     //set color
+    
     setColor() {
         this.note.style.backgroundColor = this.color.value;
     }
     //pin note
+    
     pin() {
         console.log("library");
     }
+    
     jSON() {
         return {
             title: this.title.value,
@@ -120,30 +126,36 @@ export class Storage {
         this.loadFromStorage();
     }
     //add note to notes array
+    
     add(note) {
         this.notes.push(note);
         this.saveToStorage()
     }
     //add note to pinnedNotes array
+    
     pin(note) {
         this.pinnedNotes.push(note);
         this.remove(note);
     }
     //remove note from notes array
+    
     remove(note) {
         this.notes.splice(this.notes.indexOf(note), 1);
         this.saveToStorage()
     }
     //remove note from pinnedNotes array
+    
     unpin(note) {
         const indexOfNote = this.pinnedNotes.indexOf(note);
         this.pinnedNotes.splice(indexOfNote, 1);
         this.add(note);
     }
+    
     saveToStorage() {
         localStorage.setItem("notes", JSON.stringify(this.notes.map(note => note.jSON())));
         localStorage.setItem("pinnedNotes", JSON.stringify(this.pinnedNotes.map(note => note.jSON())));
     }
+    
     loadFromStorage() {
         const notess = JSON.parse(localStorage.getItem("notes")) ?? [];
         const pinnedNotess = JSON.parse(localStorage.getItem("pinnedNotes")) ?? [];
@@ -176,6 +188,7 @@ export class Notification {
         this.notification.addEventListener("click", this.triger.bind(this));
         setTimeout(this.triger.bind(this), time);
     }
+    
     triger() {
         alert("Your remider for note: " + this.note.input.value);
     }
