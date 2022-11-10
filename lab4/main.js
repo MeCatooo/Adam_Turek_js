@@ -20,12 +20,12 @@ Note.prototype.remove = function () {
 let storage = new Storage();
 
 addEventListener("load", () => {
-    storage.notes.forEach(note => {
-      renderNote(note);
-    });
-    storage.pinnedNotes.forEach(note => {
-      renderPinned(note);
-    });
+  storage.notes.forEach(note => {
+    renderNote(note);
+  });
+  storage.pinnedNotes.forEach(note => {
+    renderPinned(note);
+  });
 });
 
 document.querySelector("#add").addEventListener("click", function () {
@@ -43,9 +43,23 @@ document.querySelector("#notifications").addEventListener("click", function (eve
   }
 });
 
-function renderNote(note){
+document.querySelector("#Search").addEventListener("change", function (event) {
+  const search = event.target.value.toLowerCase();
+  const finded = storage.findAll(search);
+  document.querySelector("#Notes").innerHTML = "";
+  document.querySelector("#Pinned").innerHTML = "";
+  finded.notes.forEach(note => {
+    renderNote(note);
+  });
+  finded.pinnedNotes.forEach(note => {
+    renderPinned(note);
+  });
+
+});
+
+function renderNote(note) {
   document.querySelector("#Notes").appendChild(note.note);
 }
-function renderPinned(note){
+function renderPinned(note) {
   document.querySelector("#Pinned").appendChild(note.note);
 }
