@@ -1,4 +1,4 @@
-import { Ball, Board, Hole } from "./library.js";
+import { Ball, Board} from "./library.js";
 
 let board = setup();
 let gamma = 0;
@@ -30,11 +30,6 @@ function setup() {
     let tmpboard = new Board(c.height, c.width, ctx);
     let ball = new Ball(c.width/2, c.height/2, 10);
     tmpboard.add(ball);
-    generateRandomHoles(tmpboard, 10);
+    tmpboard.addManyHoles(10);
     return tmpboard;
-}
-function generateRandomHoles(board, count) {
-    for (let i = 0; i < count; i++) {
-        board.add(new Hole(Math.random() * board.width, Math.random() * board.height, 10));
-    }
 }
