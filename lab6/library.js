@@ -46,7 +46,7 @@ export class Board {
         }
     }
     nextFrame(beta, gamma) {
-        if (this.isFinished ) {
+        if (this.isFinished || this.holes.length === 0) {
             return this.gameOver();
         }
         this.ctx.clearRect(0, 0, this.width, this.height);
