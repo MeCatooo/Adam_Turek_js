@@ -1,0 +1,12 @@
+canvas{
+    background-color: grey;
+    background-position: center;
+    background-size: 100% 100%;
+    margin: auto;
+    display: block;
+  }
+ #scoreShow{
+  text-align: center;
+  font-size: 30px;
+  margin: auto;
+ }

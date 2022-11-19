@@ -1,57 +1,40 @@
-window.addEventListener('deviceorientation', (event) => {
+import { Ball, Board, Hole } from "./library.js";
+
+let board = setup();
+let gamma = 0;
+let beta = 0;
+
+window.addEventListener("deviceorientation", (event) => {
     const alpha = event.alpha;
-    const beta = event.beta;
-    const gamma = event.gamma;
-    document.getElementById('alpha').innerHTML = alpha;
-    document.getElementById('beta').innerHTML = beta;
-    document.getElementById('gamma').innerHTML = gamma;
+    beta = event.beta;
+    gamma = event.gamma;
+    document.getElementById("alpha").innerHTML = alpha;
+    document.getElementById("beta").innerHTML = beta;
+    document.getElementById("gamma").innerHTML = gamma;
+
+    const angle = (Math.atan2(beta, gamma) * 180) / Math.PI;
+    const speed = (Math.abs(beta) + Math.abs(gamma)) / 2;
+    document.getElementById("angle").innerHTML = angle;
+    document.getElementById("speed").innerHTML = speed;
+
 });
+let aniamte = () => {
+    board.nextFrame(beta, gamma);
+    requestAnimationFrame(aniamte);
+};
+requestAnimationFrame(aniamte);
 
-var Engine = Matter.Engine,
-    Render = Matter.Render,
-    Runner = Matter.Runner,
-    Bodies = Matter.Bodies,
-    Composite = Matter.Composite;
-
-// create an engine
-var engine = Engine.create();
-engine.world.gravity.y = 0;
-
-
-// create a renderer
-var render = Render.create({
-    element: document.body,
-    engine: engine
-});
-
-
-const width = window.screen.width + 10;
-const height = window.screen.height + 10;
-render.canvas.width = width - 50;
-
-
-// create two boxes and a ground
-var boxA = Bodies.rectangle(100, 200, 80, 80);
-var boxB = Bodies.rectangle(150, 50, 80, 80);
-var ground = Bodies.rectangle(width/2, 600, width, 60, { isStatic: true });
-var leftWall = Bodies.rectangle(0, height/2, 60, height, { isStatic: true });
-var rightWall = Bodies.rectangle(width, height/2, 60, height, { isStatic: true });
-var roof = Bodies.rectangle(width/2, 0, width, 60, { isStatic: true });
-
-// add all of the bodies to the world
-Composite.add(engine.world, [boxA, boxB, ground,roof, leftWall, rightWall]);
-
-
-
-
-const vector = Matter.Vector.create(10, -10);
-Matter.Body.setVelocity(boxA, vector);
-
-// run the renderer
-Render.run(render);
-
-// create runner
-var runner = Runner.create();
-
-// run the engine
-Runner.run(runner, engine);
+function setup() {
+    let c = document.getElementById("canvas");
+    let ctx = c.getContext("2d");
+    let tmpboard = new Board(c.height, c.width, ctx);
+    let ball = new Ball(c.width/2, c.height/2, 10);
+    tmpboard.add(ball);
+    generateRandomHoles(tmpboard, 10);
+    return tmpboard;
+}
+function generateRandomHoles(board, count) {
+    for (let i = 0; i < count; i++) {
+        board.add(new Hole(Math.random() * board.width, Math.random() * board.height, 10));
+    }
+}
