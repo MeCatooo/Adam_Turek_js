@@ -23,8 +23,6 @@ document.querySelector("#reset").addEventListener("click", () => {
     board = start();
 });
 document.querySelector("#balls").addEventListener("change", () => {
-    //if range is bigger than balls.length add balls
-    //if range is smaller than balls.length remove balls
     let range = document.querySelector("#balls").value;
     if (range > board.balls.length) {
         board.addManyBalls(range - board.balls.length);

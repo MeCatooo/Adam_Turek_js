@@ -19,20 +19,16 @@ function generator(number) {
 
 async function start(numbers) {
     let result = 0;
-    for (let i = 0; i < numbers.length; i++) {
-        result = await asyncAdd(result, numbers[i]);
+    for (const element of numbers) {
+        result = await asyncAdd(result, element);
     }
     return result;
 }
 
 async function optimalize(numbers) {
-    let lists = [];
     let promises = [];
     for (let i = 0; i < numbers.length; i += 10) {
-        lists.push(numbers.slice(i, i + 10));
-    }
-    for (let i = 0; i < lists.length; i++) {
-        promises.push(start(lists[i]));
+        promises.push(start(numbers.slice(i, i + 10)));
     }
     return start(await Promise.all(promises));
 }
