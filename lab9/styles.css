@@ -1,0 +1,92 @@
+.Notes{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 1020px;
+    margin: 0 auto;
+    border: 1px solid black;
+}
+.Note{
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,0.7);
+    animation: append-animate .3s linear;
+}
+.content{
+    border: 1px solid black;
+    padding: 0 10px;
+    background-color: #f2f2f2;
+    width: 100px;
+    height: 200px;
+    position: absolute;
+    overflow: hidden;
+    z-index: 999999;
+    transition: max-height 0.2s ease-out;
+    max-height: 0;
+}
+nav{
+    display: flex;
+    justify-content: center;
+}
+#menu{
+    position: relative;
+}
+.noteInput{
+    text-decoration: none;
+    margin: auto;
+    height: 70%;
+    width: 80%;
+    border: 1px solid rgb(136, 136, 136);
+    text-align: start;
+    resize: none;
+}
+.buttons{
+    display: flex;
+    justify-content: space-around;
+    margin: 10px;
+}
+.buttons button{
+    background-color: transparent;
+    border: 1px solid rgb(17, 17, 17);
+    cursor: pointer;
+}
+.utility{
+    display: flex;
+    justify-content: space-around;
+    margin: 10px;
+    align-items: center;
+}
+img{
+    cursor: pointer;
+    width: 15px;
+}
+.edit{
+    background-color: #f2f2f2 !important;
+    color: yellowgreen;
+    text-shadow: 0 0 10px yellowgreen, 0 0 20px yellowgreen, 0 0 30px yellowgreen, 0 0 40px yellowgreen, 0 0 50px #f2f2f2, 0 0 60px #f2f2f2, 0 0 70px #f2f2f2;
+}
+.title{
+    width: 80%;
+    margin: 10px auto;
+
+}
+@keyframes append-animate {
+	from {
+		transform: scale(0);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;	
+	}
+}
