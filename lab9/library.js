@@ -92,11 +92,6 @@ export class Note {
     remove() {
         this.note.remove();
     }
-    //remider
-    
-    remind() {
-        new Notification(1000, this);
-    }
     //set color
     
     setColor() {
@@ -131,7 +126,11 @@ export class Weather{
         this.Weather = document.createElement("div");
         this.Weather.classList.add("Note");
         this.createDisplay();
-        this.fetchWeather();
+        if(!this.weatherData)
+            this.fetchWeather();
+        else
+            this.updateWeather();
+        this.updater();
     }
     fetchWeather(){
         const apiKey = "7b19818bf7f7fe6ea4116702e233011f";
@@ -146,9 +145,14 @@ export class Weather{
     }
     updateWeather(){
         this.cityName.textContent = this.city;
-        this.temp.textContent = this.weatherData.main.temp;
+        this.temp.textContent = this.weatherData.main.temp + " °C";
         this.description.textContent = this.weatherData.weather[0].description;
-        this.wind.textContent = this.weatherData.wind.speed;
+        this.wind.textContent = this.weatherData.wind.speed + " m/s";
+        this.icon.src = `http://openweathermap.org/img/w/${this.weatherData.weather[0].icon}.png`;
+    }
+    updater(){
+        this.fetchWeather();
+        setTimeout(this.updater, 60000);
     }
     createDisplay(){
 
@@ -167,6 +171,11 @@ export class Weather{
         this.wind = document.createElement("span");
         this.wind.textContent = "wind";
         this.Weather.appendChild(this.wind);
+
+        this.icon = document.createElement("img");
+        this.icon.src = "icon";
+        this.icon.style.width = "50px";
+        this.Weather.appendChild(this.icon);
     }
     jSON(){
         return {
@@ -225,20 +234,5 @@ export class Storage {
     findAll(query) {
         return {notes:this.notes.filter(note => note.isMatch(query)), 
             pinnedNotes:this.pinnedNotes.filter(note => note.isMatch(query))};
-    }
-}
-
-export class Notification {
-    constructor(time, note) {
-        this.note = note;
-        this.notification = document.createElement("div");
-        this.notification.classList.add("notification");
-        this.notification.innerHTML = "Notification";
-        this.notification.addEventListener("click", this.triger.bind(this));
-        setTimeout(this.triger.bind(this), time);
-    }
-    
-    triger() {
-        alert("Your remider for note: " + this.note.input.value);
     }
 }

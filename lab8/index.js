@@ -1,4 +1,4 @@
-import { Ball, Board} from "./library.js";
+import {Board} from "./library.js";
 
 let board;
 let aniamte = () => {
