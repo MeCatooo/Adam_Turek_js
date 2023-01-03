@@ -1,4 +1,5 @@
-import { Note, Storage } from './library.js';
+import { Note } from "./note.js";
+import { Storage } from "./Storage.js";
 
 
 Note.prototype.pin = function () {
@@ -31,7 +32,7 @@ addEventListener("load", () => {
 document.querySelector("#add").addEventListener("click", function () {
   const newNote = new Note();
   storage.add(newNote);
-  document.querySelector("#Notes").appendChild(newNote.note);
+  renderNote(newNote);
 });
 
 document.querySelector("#notifications").addEventListener("click", function (event) {
@@ -43,7 +44,7 @@ document.querySelector("#notifications").addEventListener("click", function (eve
   }
 });
 
-document.querySelector("#Search").addEventListener("change", function (event) {
+document.querySelector("#Search").addEventListener("keyup", function (event) {
   const search = event.target.value.toLowerCase();
   const finded = storage.findAll(search);
   document.querySelector("#Notes").innerHTML = "";

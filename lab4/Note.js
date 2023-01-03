@@ -1,3 +1,5 @@
+import { Notification } from "./Notification.js";
+
 export class Note {
     constructor(date, color, text, title) {
         this.note = document.createElement("div");
@@ -88,117 +90,34 @@ export class Note {
         }
     }
     //remove note from document
-    
     remove() {
         this.note.remove();
     }
     //remider
-    
     remind() {
         new Notification(1000, this);
     }
     //set color
-    
     setColor() {
         this.note.style.backgroundColor = this.color.value;
     }
     //pin note
-    
     pin() {
-        console.log("library");
+        elem.dispatchEvent(new Event("pinNote"));
     }
-    
+
     jSON() {
         return {
             title: this.title.value,
             text: this.input.value,
             date: this.createDate,
             color: this.color.value
-        }
+        };
     }
     isMatch(query) {
-        if(!query)
+        if (!query)
             return true;
         return (this.title.value.includes(query) || this.input.value.includes(query));
     }
 
-}
-
-export class Storage {
-    constructor() {
-        this.notes = [];
-        this.pinnedNotes = [];
-        this.loadFromStorage();
-    }
-    //add note to notes array
-    
-    add(note) {
-        this.notes.push(note);
-        this.saveToStorage()
-    }
-    //add note to pinnedNotes array
-    
-    pin(note) {
-        this.pinnedNotes.push(note);
-        this.remove(note);
-    }
-    //remove note from notes array
-    
-    remove(note) {
-        this.notes.splice(this.notes.indexOf(note), 1);
-        this.saveToStorage()
-    }
-    //remove note from pinnedNotes array
-    
-    unpin(note) {
-        const indexOfNote = this.pinnedNotes.indexOf(note);
-        this.pinnedNotes.splice(indexOfNote, 1);
-        this.add(note);
-    }
-    
-    saveToStorage() {
-        localStorage.setItem("notes", JSON.stringify(this.notes.map(note => note.jSON())));
-        localStorage.setItem("pinnedNotes", JSON.stringify(this.pinnedNotes.map(note => note.jSON())));
-    }
-    
-    loadFromStorage() {
-        const notess = JSON.parse(localStorage.getItem("notes")) ?? [];
-        const pinnedNotess = JSON.parse(localStorage.getItem("pinnedNotes")) ?? [];
-        notess.forEach(note => {
-            this.notes.push(new Note(
-                note.date,
-                note.color,
-                note.text,
-                note.title
-            ));
-        });
-        pinnedNotess.forEach(note => {
-            this.pinnedNotes.push(new Note(
-                note.date,
-                note.color,
-                note.text,
-                note.title
-            ));
-        });
-        addEventListener("change", this.saveToStorage.bind(this));
-    }
-    findAll(query) {
-        return {notes:this.notes.filter(note => note.isMatch(query)), 
-            pinnedNotes:this.pinnedNotes.filter(note => note.isMatch(query))};
-    }
-}
-
-export class Notification {
-    constructor(time, note) {
-        this.note = note;
-        this.notification = document.createElement("div");
-        this.notification.classList.add("notification");
-        this.notification.innerHTML = "Notification";
-        this.notification.addEventListener("click", this.triger.bind(this));
-        setTimeout(this.triger.bind(this), time);
-    }
-    
-    triger() {
-        alert("Your remider for note: " + this.note.input.value);
-    }
 }
