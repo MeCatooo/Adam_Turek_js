@@ -1,32 +1,25 @@
 import { Note } from "./note.js";
 import { Storage } from "./Storage.js";
 
-
-Note.prototype.pin = function () {
-  this.note.classList.toggle("pinned");
-  if (this.note.classList.contains("pinned")) {
-    storage.pin(this);
-    renderPinned(this);
-  } else {
-    storage.unpin(this);
-    renderNote(this);
-  }
-}
-
-Note.prototype.remove = function () {
-  storage.remove(this);
-  this.note.remove();
-}
-
 let storage = new Storage();
 
 addEventListener("load", () => {
-  storage.notes.forEach(note => {
+  const notes = storage.getRenderedNotes();
+  notes.notes.forEach(note => {
     renderNote(note);
   });
-  storage.pinnedNotes.forEach(note => {
+  notes.pinnedNotes.forEach(note => {
     renderPinned(note);
   });
+});
+
+addEventListener("pinNote", (event) => {
+  const note = event.detail;
+  if (storage.pinnedNotes.includes(note)) {
+    renderPinned(note);
+  } else {
+    renderNote(note);
+  }
 });
 
 document.querySelector("#add").addEventListener("click", function () {

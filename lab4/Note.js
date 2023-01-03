@@ -91,6 +91,8 @@ export class Note {
     }
     //remove note from document
     remove() {
+        const event = new CustomEvent("removeNote", {detail:this});
+        window.dispatchEvent(event);
         this.note.remove();
     }
     //remider
@@ -103,7 +105,8 @@ export class Note {
     }
     //pin note
     pin() {
-        elem.dispatchEvent(new Event("pinNote"));
+        const event = new CustomEvent("pinNote", {detail:this});
+        window.dispatchEvent(event);
     }
 
     jSON() {
