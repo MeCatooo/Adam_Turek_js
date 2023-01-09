@@ -80,6 +80,26 @@ img{
     margin: 10px auto;
 
 }
+.hourly{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px;
+    background-color: #f2f2f2;
+
+}
+.hour{
+    /* dislpay in collum */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin: 2px;
+    border: 1px solid black;
+
+}
+
 @keyframes append-animate {
 	from {
 		transform: scale(0);

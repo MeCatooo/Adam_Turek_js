@@ -1,21 +1,5 @@
-import { Note, Storage, Weather } from './library.js';
-
-
-Note.prototype.pin = function () {
-  this.note.classList.toggle("pinned");
-  if (this.note.classList.contains("pinned")) {
-    storage.pin(this);
-    renderPinned(this);
-  } else {
-    storage.unpin(this);
-    renderNote(this);
-  }
-}
-
-Note.prototype.remove = function () {
-  storage.remove(this);
-  this.note.remove();
-}
+import { Storage } from "./Storage.js";
+import { Weather } from "./Weather.js";
 
 let storage = new Storage();
 
@@ -32,8 +16,6 @@ document.querySelector("#add").addEventListener("click", function (event) {
   const search = document.querySelector("#Search").value;
   storage.add(new Weather(search));
   renderNote(storage.notes[storage.notes.length - 1]);
-
-
 });
 
 function renderNote(note) {
