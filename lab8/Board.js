@@ -1,42 +1,12 @@
-export class Ball {
-    x = 0;
-    y = 0;
-    speed = Math.random() * (3 - 1) + 1;
-    direction = Math.random() * 2 * Math.PI;
-    size = 0;
-    constructor(x, y, size) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
-    }
+import { Ball } from "./Ball.js";
 
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-        ctx.fillStyle = "red";
-        ctx.fill();
-        ctx.stroke();
-    }
-
-    move(x, y, ctx) {
-        this.x = x;
-        this.y = y;
-        this.draw(ctx);
-    }
-
-    tryCollison(ball, requireDistance = 0) {
-        let distance = Math.sqrt(Math.pow(this.x - ball.x, 2) + Math.pow(this.y - ball.y, 2));
-        return distance < this.size + ball.size + requireDistance;
-    }
-
-}
 
 export class Board {
     height = 0;
     width = 0;
     ctx = null;
     balls = [];
-    cursor = {x: 0, y: 0, size: 50};
+    cursor = { x: 0, y: 0, size: 50 };
     constructor(height, width, ctx, timer = 1000 * 60) {
         this.height = height;
         this.width = width;
@@ -54,7 +24,7 @@ export class Board {
         }
     }
 
-    removeBalls(count){
+    removeBalls(count) {
         this.balls.splice(0, count);
     }
 
@@ -96,7 +66,7 @@ export class Board {
         if (ball.x + ball.size < 0 || ball.x + ball.size > this.width) {
             ball.direction = Math.PI - ball.direction;
         }
-        if (ball.y + ball.size < 0 || ball.y + ball.size> this.height) {
+        if (ball.y + ball.size < 0 || ball.y + ball.size > this.height) {
             ball.direction = 2 * Math.PI - ball.direction;
         }
     }

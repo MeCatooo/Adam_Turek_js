@@ -1,4 +1,5 @@
-import { Ball, Board} from "./library.js";
+import { Board } from "./board.js";
+import { Ball } from "./ball.js";
 
 let board = setup();
 let gamma = 0;
@@ -18,10 +19,12 @@ window.addEventListener("deviceorientation", (event) => {
     document.getElementById("speed").innerHTML = speed;
 
 });
+
 let aniamte = () => {
     board.nextFrame(beta, gamma);
     requestAnimationFrame(aniamte);
 };
+
 requestAnimationFrame(aniamte);
 
 function setup() {

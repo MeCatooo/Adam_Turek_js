@@ -21,6 +21,7 @@ document.querySelector("#add").addEventListener("click", function (event) {
 function renderNote(note) {
   document.querySelector("#Notes").appendChild(note.Weather);
 }
+
 function renderPinned(note) {
   document.querySelector("#Pinned").appendChild(note.Weather);
 }

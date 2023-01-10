@@ -10,7 +10,6 @@ export class Note {
 
     }
 
-    //create input
     createInput(text, title) {
         this.title = document.createElement("input");
         this.title.type = "text";
@@ -29,7 +28,6 @@ export class Note {
         this.note.appendChild(this.input);
     }
 
-    //create utility
     createUtility(date, color) {
         const utility = document.createElement("div");
         utility.classList.add("utility");
@@ -55,7 +53,6 @@ export class Note {
         this.note.appendChild(utility);
     }
 
-    //create buttons
     createButtons() {
         const buttons = document.createElement("div");
         buttons.classList.add("buttons");
@@ -89,21 +86,21 @@ export class Note {
             this.editButton.classList.remove("edit");
         }
     }
-    //remove note from document
+
     remove() {
         const event = new CustomEvent("removeNote", {detail:this});
         window.dispatchEvent(event);
         this.note.remove();
     }
-    //remider
+
     remind() {
         new Notification(1000, this);
     }
-    //set color
+
     setColor() {
         this.note.style.backgroundColor = this.color.value;
     }
-    //pin note
+
     pin() {
         const event = new CustomEvent("pinNote", {detail:this});
         window.dispatchEvent(event);
@@ -117,6 +114,7 @@ export class Note {
             color: this.color.value
         };
     }
+    
     isMatch(query) {
         if (!query)
             return true;

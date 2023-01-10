@@ -1,4 +1,4 @@
-import {DataStroage} from './library.js'
+import {DataStroage} from "./DataStroage.js";
 
 let data = new DataStroage();
 let intervalsMetronom = [];
@@ -66,6 +66,7 @@ function removeInterval(id) {
         intervalsMetronom.splice(index, 1);
     }
 }
+
 function removeIntervalRecorded(id) {
     const index = intervalsRecords.findIndex(item => item.id === id)
     if (index > -1) {
@@ -128,6 +129,7 @@ document.querySelectorAll("#loop").forEach(item => {
         intervalsRecords.push(toSave);
     })
 })
+
 document.querySelectorAll(".audio-style input").forEach(element => {
     element.addEventListener("change", (event) => {
         const id = event.target.parentElement.id;

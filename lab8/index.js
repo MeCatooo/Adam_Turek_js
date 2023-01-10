@@ -19,9 +19,11 @@ document.querySelector("#start").addEventListener("click", (event) => {
     board = start();
     requestAnimationFrame(aniamte);
 });
+
 document.querySelector("#reset").addEventListener("click", () => {
     board = start();
 });
+
 document.querySelector("#balls").addEventListener("change", () => {
     let range = document.querySelector("#balls").value;
     if (range > board.balls.length) {
@@ -31,6 +33,7 @@ document.querySelector("#balls").addEventListener("change", () => {
         board.removeBalls(board.balls.length - range);
     }
 });
+
 document.querySelector("canvas").addEventListener("mousemove", (event) => {
     if(board)
     board.moveCursor(event.clientX, event.clientY);
