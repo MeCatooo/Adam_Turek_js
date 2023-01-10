@@ -1,9 +1,9 @@
-var submitButton = document.querySelector('#inputs')
+let submitButton = document.querySelector('#inputs')
 submitButton.addEventListener("change", () => {
-    var data = document.querySelectorAll("input");
-    var castedData = []
+    let data = document.querySelectorAll("input");
+    let castedData = []
     data.forEach(x => castedData.push(+x.value ?? 0))
-    var sum = castedData.reduce((a, b) => a + b, 0)
+    let sum = castedData.reduce((a, b) => a + b, 0)
 
 
     document.querySelector("#sum").textContent = sum
@@ -12,17 +12,17 @@ submitButton.addEventListener("change", () => {
     document.querySelector("#max").textContent = Math.max.apply(Math, castedData)
 })
 
-var addButton = document.querySelector('#add')
+let addButton = document.querySelector('#add')
 addButton.addEventListener("click", () => {
-    var buttonToCopy = document.querySelector(".dataInput")
-    var clone = buttonToCopy.cloneNode(true);
+    let buttonToCopy = document.querySelector(".dataInput")
+    let clone = buttonToCopy.cloneNode(true);
 
     document.getElementById("inputs").appendChild(clone);
 })
 
-var deleteButton = document.querySelector('#delete')
+let deleteButton = document.querySelector('#delete')
 deleteButton.addEventListener("click", () => {
-    var data = document.querySelectorAll("input");
+    let data = document.querySelectorAll("input");
 
     data.forEach(x =>{ 
         if(data.length == 1) return;

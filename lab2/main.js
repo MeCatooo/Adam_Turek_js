@@ -1,26 +1,26 @@
 
-var pictures = ["https://di.com.pl/pic/photo/Screen_Shot_2014_08_21_at_101244_AM_640x834_1408689031.png",
+let pictures = ["https://di.com.pl/pic/photo/Screen_Shot_2014_08_21_at_101244_AM_640x834_1408689031.png",
     "https://s9.tvp.pl/images2/9/b/7/uid_9b7826f856b7d8a214e96177c74b2e2b1604928163838_width_1280_play_0_pos_0_gs_0_height_720_warunki-pracy-na-planie-dostosowano-do-wymagan-bezpieczenstwa-zw-z-epidemia-fot-shutterstockelisa-manzati-zdjecie-ilustracyjne.jpg",
     "https://ocdn.eu/pulscms-transforms/1/NV9k9kpTURBXy9hZjA2NDY0YWVkN2JiMjJiMTUyMmZjNDg3MGI0ZDU2My5qcGeTkwXNBLDNAqSVB9kyL3B1bHNjbXMvTURBXy8yMzM3YzlmZDZiOTMxZWU2Y2IwZDIzZGNiYTI1OGE5ZC5wbmcAwgCTCaZkNjFjMTgGgaEwAQ/zwycieskie-zdjecie-wildlife-photographer-of-the-year-2019-autor-yongqing-bao.jpg"];
 
 
 for (let i = 0; i < pictures.length; i++) {
-    var contentLoaction = document.querySelector("#slideshow-content")
-    var slide = document.createElement("div");
+    let contentLoaction = document.querySelector("#slideshow-content")
+    let slide = document.createElement("div");
     slide.className = "mySlides fade";
 
-    var slideNumber = document.createElement("div");
+    let slideNumber = document.createElement("div");
     slideNumber.className = "numbertext";
     slideNumber.innerHTML = i + 1 + " / " + pictures.length;
     slide.appendChild(slideNumber);
 
-    var slideImage = document.createElement("img");
+    let slideImage = document.createElement("img");
     slideImage.src = pictures[i];
     slide.appendChild(slideImage)
 
     contentLoaction.appendChild(slide)
 
-    var dot = document.createElement("span");
+    let dot = document.createElement("span");
     dot.className = "dot";
     dot.addEventListener("click", () => { currentSlide(i + 1) });
     document.querySelector("#dots").appendChild(dot);
@@ -56,7 +56,7 @@ function showSlides(n) {
     dots[slideIndex - 1].className += " active";
 }
 
-var autoSlides = setInterval(() => {
+let autoSlides = setInterval(() => {
     if (!isPaused)
         plusSlides(1)
 }, 5000)

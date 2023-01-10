@@ -53,10 +53,10 @@ function playSound(sound) {
 
 function playRecord(event) {
     const storage = data.getData(event.target.parentElement.id);
-    for (let i = 0; i < storage.length; i++) {
+    for (const element of storage) {
         setTimeout(() => {
-            playSound(storage[i].soundName)
-        }, storage[i].timestamp - storage[0].timestamp)
+            playSound(element.soundName)
+        }, element.timestamp - storage[0].timestamp)
     }
 }
 

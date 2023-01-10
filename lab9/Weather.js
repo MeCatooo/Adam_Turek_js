@@ -40,8 +40,8 @@ export class Weather {
             .then(data => {
                 this.hourlyData = data;
                 console.log("Fetched hourly weather data")
-                if(this.hourlyDisplay)
-                    this.hourlyDisplay.remove();
+                if(this.hourly)
+                    this.hourly.remove();
                 this.createHourlyDisplay();
             });
     }

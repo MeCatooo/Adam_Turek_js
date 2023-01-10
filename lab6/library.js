@@ -20,6 +20,7 @@ export class Ball {
         this.draw(ctx);
     }
 }
+
 export class Board {
     height = 0;
     width = 0;
@@ -35,14 +36,14 @@ export class Board {
         this.setTimer(timer);
     }
     add(object) {
-        if (object.move)
-            this.balls.push(object);
-        else
-            this.holes.push(object);
+        if (object.move) this.balls.push(object);
+        else this.holes.push(object);
     }
     addManyHoles(count) {
         for (let i = 0; i < count; i++) {
-            this.add(new Hole(Math.random() * this.width, Math.random() * this.height, 10, i));
+            this.add(
+                new Hole(Math.random() * this.width, Math.random() * this.height, 10, i)
+            );
         }
     }
     nextFrame(beta, gamma) {
@@ -50,7 +51,7 @@ export class Board {
             return this.gameOver();
         }
         this.ctx.clearRect(0, 0, this.width, this.height);
-        this.holes.forEach(hole => hole.draw(this.ctx));
+        this.holes.forEach((hole) => hole.draw(this.ctx));
         for (let object of this.balls) {
             const data = this.calculateMove(beta, gamma, object);
             object.move(data.x, data.y, this.ctx);
@@ -77,7 +78,9 @@ export class Board {
         }
     }
     resetBall() {
-        this.balls.forEach(ball => ball.move(this.width / 2, this.height / 2, this.ctx));
+        this.balls.forEach((ball) =>
+            ball.move(this.width / 2, this.height / 2, this.ctx)
+        );
     }
     score() {
         this.holes.shift();
@@ -120,8 +123,9 @@ export class Hole {
         ctx.stroke();
     }
     tryCollison(ball) {
-
-        let distance = Math.sqrt(Math.pow(this.x - ball.x, 2) + Math.pow(this.y - ball.y, 2));
+        let distance = Math.sqrt(
+            Math.pow(this.x - ball.x, 2) + Math.pow(this.y - ball.y, 2)
+        );
         return distance < this.size + ball.size;
     }
 }

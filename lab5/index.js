@@ -20,11 +20,9 @@ class LoggerObserver {
     this.log = Logger.log
     this.subscribers = []
   }
-  //subscribe to logger
   subscribe(fn) {
     this.subscribers.push(fn)
   }
-  //execute all subscribers and log data
   executeAndLog = (data) => {
     this.subscribers.forEach(subscriber => this.log(subscriber(data)))
   }
