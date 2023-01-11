@@ -1,4 +1,4 @@
-import {Board} from "./library.js";
+import {Board} from "./Board.js";
 
 let board;
 let aniamte = () => {
