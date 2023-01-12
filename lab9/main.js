@@ -12,6 +12,10 @@ addEventListener("load", () => {
   });
 });
 
+addEventListener("weatherRemoved", event => {
+  storage.remove(event.detail);
+});
+
 document.querySelector("#add").addEventListener("click", function (event) {
   const search = document.querySelector("#Search").value;
   storage.add(new Weather(search));

@@ -15,11 +15,17 @@ addEventListener("load", () => {
 
 addEventListener("pinNote", (event) => {
   const note = event.detail;
+  storage.togglePin(note);
   if (storage.pinnedNotes.includes(note)) {
     renderPinned(note);
   } else {
     renderNote(note);
   }
+});
+
+addEventListener("removeNote", (event) => {
+  const note = event.detail;
+  storage.remove(note);
 });
 
 document.querySelector("#add").addEventListener("click", function () {

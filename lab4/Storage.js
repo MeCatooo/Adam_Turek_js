@@ -6,8 +6,6 @@ export class Storage {
         this.notes = [];
         this.pinnedNotes = [];
         this.loadFromStorage();
-        addEventListener("pinNote", this.togglePin.bind(this));
-        addEventListener("removeNote", this.remove.bind(this));
     }
 
     add(note) {
@@ -17,11 +15,13 @@ export class Storage {
 
     #pin(note) {
         this.pinnedNotes.push(note);
-        this.remove(note);
+        this.notes.splice(this.notes.indexOf(note), 1);
+        this.saveToStorage();
     }
 
     remove(note) {
         this.notes.splice(this.notes.indexOf(note), 1);
+        this.pinnedNotes.splice(this.pinnedNotes.indexOf(note), 1);
         this.saveToStorage();
     }
 
@@ -31,8 +31,7 @@ export class Storage {
         this.add(note);
     }
 
-    togglePin(event) {
-        const note = event.detail;
+    togglePin(note) {;
         if (this.pinnedNotes.includes(note)) {
             this.#unpin(note);
         } else {

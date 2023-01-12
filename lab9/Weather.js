@@ -1,11 +1,13 @@
 
 export class Weather {
-    constructor(city, weatherData = undefined) {
+    constructor(city, weatherData = undefined, hourlyData = undefined) {
         this.city = city;
         this.weatherData = weatherData;
+        this.hourlyData = hourlyData;
         this.Weather = document.createElement("div");
         this.Weather.classList.add("Note");
         this.createDisplay();
+        this.createButtons();
         if (!this.weatherData || !this.hourlyData){
             this.fetchWeather();
             this.fetchWeatherHourly();
@@ -16,6 +18,67 @@ export class Weather {
             this.createHourlyDisplay();
         }
         this.updater();
+    }
+
+    createDisplay() {
+        this.cityName = document.createElement("span");
+        this.cityName.textContent = this.cityName;
+        this.Weather.appendChild(this.cityName);
+
+        this.temp = document.createElement("span");
+        this.temp.textContent = "temp";
+        this.Weather.appendChild(this.temp);
+
+        this.description = document.createElement("span");
+        this.description.textContent = "description";
+        this.Weather.appendChild(this.description);
+
+        this.wind = document.createElement("span");
+        this.wind.textContent = "wind";
+        this.Weather.appendChild(this.wind);
+
+        this.icon = document.createElement("img");
+        this.icon.style.width = "50px";
+        this.Weather.appendChild(this.icon);
+    }
+
+    createHourlyDisplay() {
+        this.hourly = document.createElement("div");
+        this.hourly.classList.add("hourly");
+        this.Weather.appendChild(this.hourly);
+
+        for (let i = 0; i < 4; i++) {
+            const hour = document.createElement("div");
+            hour.classList.add("hour");
+
+            const hourTime = document.createElement("span");
+            hourTime.textContent = new Date(this.hourlyData.list[i].dt * 1000).getHours() + ":00";
+            hour.appendChild(hourTime);
+
+            const hourTemp = document.createElement("span");
+            hourTemp.textContent = this.hourlyData.list[i].main.temp + " °C";
+            hour.appendChild(hourTemp);
+
+            const hourIcon = document.createElement("img");
+            hourIcon.src = `http://openweathermap.org/img/w/${this.hourlyData.list[i].weather[0].icon}.png`;
+            hourIcon.style.width = "50px";
+            hour.appendChild(hourIcon);
+
+            this.hourly.appendChild(hour);
+        }
+    }
+
+    createButtons() {
+        this.buttons = document.createElement("span");
+        this.buttons.classList.add("buttons");
+        this.Weather.appendChild(this.buttons);
+
+        this.deleteButton = document.createElement("button");
+        this.deleteButton.textContent = "Delete";
+        this.deleteButton.addEventListener("click", () => {
+            this.remove();
+        });
+        this.buttons.appendChild(this.deleteButton);
     }
 
     fetchWeather() {
@@ -54,6 +117,12 @@ export class Weather {
         this.icon.src = `http://openweathermap.org/img/w/${this.weatherData.weather[0].icon}.png`;
     }
 
+    remove() {
+        this.Weather.remove();
+        const event  = new CustomEvent("weatherRemoved", {detail: this});
+        window.dispatchEvent(event);
+    }
+
     updater() {
         setInterval(() => {
             this.fetchWeather();
@@ -62,61 +131,11 @@ export class Weather {
         }, 1000 * 60 * 5);
     }
 
-    createDisplay() {
-
-        this.cityName = document.createElement("span");
-        this.cityName.textContent = this.cityName;
-        this.Weather.appendChild(this.cityName);
-
-        this.temp = document.createElement("span");
-        this.temp.textContent = "temp";
-        this.Weather.appendChild(this.temp);
-
-        this.description = document.createElement("span");
-        this.description.textContent = "description";
-        this.Weather.appendChild(this.description);
-
-        this.wind = document.createElement("span");
-        this.wind.textContent = "wind";
-        this.Weather.appendChild(this.wind);
-
-        this.icon = document.createElement("img");
-        this.icon.src = "icon";
-        this.icon.style.width = "50px";
-        this.Weather.appendChild(this.icon);
-    }
-
-    createHourlyDisplay() {
-        this.hourly = document.createElement("div");
-        this.hourly.classList.add("hourly");
-        this.Weather.appendChild(this.hourly);
-
-        for (let i = 0; i < 4; i++) {
-            const hour = document.createElement("div");
-            hour.classList.add("hour");
-
-            const hourTime = document.createElement("span");
-            hourTime.textContent = new Date(this.hourlyData.list[i].dt * 1000).getHours() + ":00";
-            hour.appendChild(hourTime);
-
-            const hourTemp = document.createElement("span");
-            hourTemp.textContent = this.hourlyData.list[i].main.temp + " °C";
-            hour.appendChild(hourTemp);
-
-            const hourIcon = document.createElement("img");
-            hourIcon.src = `http://openweathermap.org/img/w/${this.hourlyData.list[i].weather[0].icon}.png`;
-            hourIcon.style.width = "50px";
-            hour.appendChild(hourIcon);
-
-            this.hourly.appendChild(hour);
-        }
-    }
-
     jSON() {
         return {
             city: this.city,
-            weatherData: this.weatherData
+            weatherData: this.weatherData,
+            hourlyData: this.hourlyData
         };
     }
-
 }
